@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Singué — La plateforme de référence pour consigner, suivre et analyser vos résultats de jeux de lotto en toute simplicité." />
+  <title>Singué — Registre des résultats de Lotto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Lotto-specific tweaks on top of style.css ── */
+
+    /* Animated counter */
+    .counter-num {
+      font-size: 2.4rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--color-primary), #7C3AED);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Ball decoration in hero */
+    .lotto-balls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .lotto-ball {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1rem;
+      color: white;
+      box-shadow: 0 4px 14px rgba(0,0,0,.18);
+      animation: ballBounce 1.8s ease-in-out infinite alternate;
+      flex-shrink: 0;
+    }
+    .lotto-ball:nth-child(1) { background: linear-gradient(135deg,#2563EB,#1D4ED8); animation-delay: 0s; }
+    .lotto-ball:nth-child(2) { background: linear-gradient(135deg,#7C3AED,#6D28D9); animation-delay: .15s; }
+    .lotto-ball:nth-child(3) { background: linear-gradient(135deg,#059669,#047857); animation-delay: .3s; }
+    .lotto-ball:nth-child(4) { background: linear-gradient(135deg,#EA580C,#C2410C); animation-delay: .45s; }
+    .lotto-ball:nth-child(5) { background: linear-gradient(135deg,#DB2777,#BE185D); animation-delay: .6s; }
+    .lotto-ball:nth-child(6) { background: linear-gradient(135deg,#0891B2,#0E7490); animation-delay: .75s; }
+    .lotto-ball:nth-child(7) { background: linear-gradient(135deg,#D97706,#B45309); animation-delay: .9s; }
+    @keyframes ballBounce {
+      from { transform: translateY(0px); }
+      to   { transform: translateY(-8px); }
+    }
+
+    /* Preview table in hero */
+    .dp-preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .74rem;
+      margin-top: 10px;
+    }
+    .dp-preview-table th {
+      padding: 6px 8px;
+      background: rgba(37,99,235,.06);
+      color: var(--color-text-secondary);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: .62rem;
+      letter-spacing: .06em;
+      text-align: center;
+    }
+    .dp-preview-table td {
+      padding: 7px 8px;
+      border-top: 1px solid var(--color-border);
+      color: var(--color-text);
+      text-align: center;
+      font-weight: 500;
+    }
+    .dp-preview-table tr:hover td { background: rgba(37,99,235,.04); }
+    .dp-mini-badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 100px;
+      font-size: .62rem;
+      font-weight: 700;
+    }
+    .dp-mini-badge.s { background: rgba(22,163,74,.12);  color: #16A34A; }
+    .dp-mini-badge.d { background: rgba(124,58,237,.12); color: #7C3AED; }
+    .dp-mini-num { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+    /* Stat strip */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-top: 48px;
+      background: var(--color-surface);
+      box-shadow: var(--shadow-sm);
+    }
+    .stat-strip__item {
+      flex: 1;
+      padding: 24px 20px;
+      text-align: center;
+      border-right: 1px solid var(--color-border);
+      transition: background var(--transition);
+    }
+    .stat-strip__item:last-child { border-right: none; }
+    .stat-strip__item:hover { background: rgba(37,99,235,.03); }
+    .stat-strip__label {
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+    }
+    .stat-strip__val {
+      font-size: 1.9rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .stat-strip__val.blue   { color: var(--color-primary); }
+    .stat-strip__val.green  { color: var(--color-success); }
+    .stat-strip__val.purple { color: #7C3AED; }
+    .stat-strip__val.orange { color: var(--color-warning); }
+
+    /* How-it-works steps */
+    .steps { display: flex; gap: 0; position: relative; }
+    .steps::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      left: calc(16.6% + 28px);
+      right: calc(16.6% + 28px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--color-primary), #7C3AED);
+      z-index: 0;
+    }
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+    .step__num {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--color-primary), #7C3AED);
+      color: white;
+      font-weight: 800;
+      font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+      box-shadow: 0 4px 16px rgba(37,99,235,.3);
+    }
+    .step h4 { font-size: .95rem; font-weight: 700; margin-bottom: 8px; color: var(--color-text); }
+    .step p  { font-size: .8rem; color: var(--color-text-secondary); line-height: 1.55; }
+
+    @media (max-width: 768px) {
+      .steps { flex-direction: column; gap: 24px; }
+      .steps::before { display: none; }
+      .stat-strip { flex-direction: column; }
+      .stat-strip__item { border-right: none; border-bottom: 1px solid var(--color-border); }
+      .stat-strip__item:last-child { border-bottom: none; }
+      .lotto-balls { gap: 7px; }
+      .lotto-ball { width: 38px; height: 38px; font-size: .85rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo" aria-label="Singué — Accueil">
+        <span class="navbar__logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="navbar__logo-text">Singué</span>
+      </a>
+
+      <nav class="navbar__nav" id="nav-menu" aria-label="Navigation principale">
+        <a href="#accueil"         class="navbar__link active" id="nav-accueil">Accueil</a>
+        <a href="#fonctionnement"  class="navbar__link"        id="nav-how">Comment ça marche</a>
+        <a href="#fonctionnalites" class="navbar__link"        id="nav-features">Fonctionnalités</a>
+        <a href="#apropos"         class="navbar__link"        id="nav-about">À propos</a>
+      </nav>
+
+      <div class="navbar__actions">
+        <a href="pages/connexion.html" class="btn btn-primary navbar__btn-login" id="btn-nav-login">Accéder au registre</a>
+      </div>
+
+      <button class="navbar__toggle" id="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="accueil" aria-labelledby="hero-title">
+      <div class="container hero__inner">
+
+        <div class="hero__content">
+          <div class="hero__tag">
+            <span class="hero__tag-dot"></span>
+            Registre officiel des tirages
+          </div>
+          <h1 class="hero__title" id="hero-title">
+            Consignez chaque tirage,<br/>
+            <span class="highlight">ne manquez aucun résultat.</span>
+          </h1>
+          <p class="hero__description">
+            Singué est la plateforme dédiée à l'enregistrement et au suivi des résultats de jeux de lotto. Centralisez vos tirages, consultez l'historique complet et gérez vos données en toute simplicité.
+          </p>
+          <div class="hero__actions">
+            <a href="pages/connexion.html" class="btn btn-primary" id="btn-hero-login">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Accéder au registre
+            </a>
+            <a href="#fonctionnement" class="btn btn-outline" id="btn-hero-how">Voir comment ça marche</a>
+          </div>
+        </div>
+
+        <!-- Dashboard Preview -->
+        <div class="hero__visual" aria-hidden="true">
+          <div class="dp-card">
+            <div class="dp-bar-header">
+              <div class="dp-dots">
+                <span class="dp-dot"></span>
+                <span class="dp-dot"></span>
+                <span class="dp-dot"></span>
+              </div>
+              <span class="dp-label">Registre Singué — Derniers tirages</span>
+            </div>
+
+            <!-- Mini lotto balls -->
+            <div style="padding: 14px 16px 0;">
+              <div class="lotto-balls">
+                <div class="lotto-ball">12</div>
+                <div class="lotto-ball">5</div>
+                <div class="lotto-ball">8</div>
+                <div class="lotto-ball">3</div>
+                <div class="lotto-ball">7</div>
+                <div class="lotto-ball">2</div>
+                <div class="lotto-ball">9</div>
+              </div>
+            </div>
+
+            <!-- Mini stats -->
+            <div class="dp-stats-grid">
+              <div class="dp-stat">
+                <div class="dp-stat-lbl">Tirages</div>
+                <div class="dp-stat-val blue">248</div>
+              </div>
+              <div class="dp-stat">
+                <div class="dp-stat-lbl">Joueurs</div>
+                <div class="dp-stat-val green">10</div>
+              </div>
+              <div class="dp-stat">
+                <div class="dp-stat-lbl">Ce mois</div>
+                <div class="dp-stat-val">32</div>
+              </div>
+              <div class="dp-stat">
+                <div class="dp-stat-lbl">Dernier</div>
+                <div class="dp-stat-val" style="font-size:.9rem">Auj. 09h00</div>
+              </div>
+            </div>
+
+            <!-- Mini data table -->
+            <div class="dp-activity" style="padding-bottom: 6px;">
+              <div class="dp-activity-title">Historique des tirages</div>
+              <table class="dp-preview-table">
+                <thead>
+                  <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>N1</th><th>N2</th><th>N3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>YIGUI</td>
+                    <td><span class="dp-mini-badge s">SIMPLE</span></td>
+                    <td>28/10/26</td>
+                    <td class="dp-mini-num">12</td><td class="dp-mini-num">5</td><td class="dp-mini-num">8</td>
+                  </tr>
+                  <tr>
+                    <td>BOGNESSA</td>
+                    <td><span class="dp-mini-badge d">DOUBLE</span></td>
+                    <td>27/10/26</td>
+                    <td class="dp-mini-num">4</td><td class="dp-mini-num">6</td><td class="dp-mini-num">11</td>
+                  </tr>
+                  <tr>
+                    <td>KHERY</td>
+                    <td><span class="dp-mini-badge s">SIMPLE</span></td>
+                    <td>26/10/26</td>
+                    <td class="dp-mini-num">7</td><td class="dp-mini-num">3</td><td class="dp-mini-num">2</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stat strip -->
+      <div class="container">
+        <div class="stat-strip">
+          <div class="stat-strip__item">
+            <div class="stat-strip__label">Tirages enregistrés</div>
+            <div class="stat-strip__val blue" id="cnt-tirages">248</div>
+          </div>
+          <div class="stat-strip__item">
+            <div class="stat-strip__label">Joueurs suivis</div>
+            <div class="stat-strip__val green">10</div>
+          </div>
+          <div class="stat-strip__item">
+            <div class="stat-strip__label">Types de jeu</div>
+            <div class="stat-strip__val purple">2</div>
+          </div>
+          <div class="stat-strip__item">
+            <div class="stat-strip__label">Numéros par tirage</div>
+            <div class="stat-strip__val orange">7</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="features" id="fonctionnement" aria-labelledby="how-title" style="padding-bottom: 40px;">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">🎱 Comment ça marche</div>
+          <h2 id="how-title">Trois étapes simples</h2>
+          <p>De la connexion à l'enregistrement d'un tirage, tout est pensé pour être rapide et intuitif.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step__num">1</div>
+            <h4>Connectez-vous</h4>
+            <p>Accédez à votre espace sécurisé via la page de connexion avec vos identifiants.</p>
+          </div>
+          <div class="step">
+            <div class="step__num">2</div>
+            <h4>Cliquez sur « Ajouter »</h4>
+            <p>Un formulaire s'ouvre : choisissez le joueur, le type de jeu, la date, l'heure et saisissez les 7 numéros tirés.</p>
+          </div>
+          <div class="step">
+            <div class="step__num">3</div>
+            <h4>Consultez l'historique</h4>
+            <p>Le tirage apparaît immédiatement dans le registre. Modifiez ou supprimez une entrée à tout moment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FEATURES ============ -->
+    <section class="features" id="fonctionnalites" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-header">
+          <div class="section-badge">✦ Fonctionnalités</div>
+          <h2 id="features-title">Tout ce dont vous avez besoin</h2>
+          <p>Singué centralise la gestion complète de vos résultats de lotto dans une interface claire, rapide et élégante.</p>
+        </div>
+
+        <div class="features__grid">
+          <div class="feat-card">
+            <div class="feat-icon blue">📋</div>
+            <h3>Registre complet</h3>
+            <p>Chaque tirage est consigné avec le nom du joueur, le type de jeu (Simple / Double Chance), la date, l'heure et les 7 numéros.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon purple">✏️</div>
+            <h3>Ajout & modification</h3>
+            <p>Ajoutez un nouveau tirage via un formulaire rapide. Corrigez une erreur de saisie à tout moment grâce à l'action Modifier.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon green">🔍</div>
+            <h3>Recherche instantanée</h3>
+            <p>Trouvez n'importe quel résultat en quelques caractères. La recherche filtre les données du registre en temps réel.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon orange">👥</div>
+            <h3>10 joueurs référencés</h3>
+            <p>YIGUI, BOGNESSA, KHERY, MOUNANFANGNI, BANNAYA, SEWE, KHOUNAKELI, FERE, SABOUI, NAFOULI — toujours accessibles.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon teal">🗄️</div>
+            <h3>Données persistantes</h3>
+            <p>Les résultats sont sauvegardés automatiquement. Revenez le lendemain, votre historique est toujours là.</p>
+          </div>
+          <div class="feat-card">
+            <div class="feat-icon pink">📱</div>
+            <h3>Interface responsive</h3>
+            <p>Consultez et saisissez vos résultats depuis n'importe quel appareil : ordinateur, tablette ou smartphone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="about" id="apropos" aria-labelledby="about-title">
+      <div class="container about__inner">
+
+        <div class="about__visual">
+          <div class="about__card">
+            <div class="about__card-header">
+              <div class="about__avatar">🎰</div>
+              <div>
+                <div class="about__card-title">Singué — Registre Lotto</div>
+                <div class="about__card-sub">Plateforme de suivi des tirages</div>
+              </div>
+            </div>
+            <div class="about__metrics">
+              <div class="about__metric-row">
+                <span class="about__metric-name">Joueurs</span>
+                <div class="about__metric-bar"><div class="about__metric-fill" style="width:100%"></div></div>
+                <span class="about__metric-pct">10</span>
+              </div>
+              <div class="about__metric-row">
+                <span class="about__metric-name">Types de jeu</span>
+                <div class="about__metric-bar"><div class="about__metric-fill" style="width:100%"></div></div>
+                <span class="about__metric-pct">2</span>
+              </div>
+              <div class="about__metric-row">
+                <span class="about__metric-name">Numéros / tirage</span>
+                <div class="about__metric-bar"><div class="about__metric-fill" style="width:100%"></div></div>
+                <span class="about__metric-pct">7</span>
+              </div>
+              <div class="about__metric-row">
+                <span class="about__metric-name">Plages horaires</span>
+                <div class="about__metric-bar"><div class="about__metric-fill" style="width:100%"></div></div>
+                <span class="about__metric-pct">15</span>
+              </div>
+            </div>
+          </div>
+          <div class="about__float">
+            <span class="about__float-icon">🎯</span>
+            <div>
+              <div class="about__float-label">Tirage enregistré</div>
+              <div class="about__float-sub">✓ Sauvegardé</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about__content">
+          <div class="section-badge">✦ À propos de Singué</div>
+          <h2 id="about-title">La mémoire de vos tirages de lotto</h2>
+          <p>
+            Singué est conçu pour les passionnés et organisateurs de jeux de lotto qui souhaitent garder une trace fiable et consultable de chaque tirage. Plus besoin de cahiers ou de fichiers éparpillés — tout est centralisé en un seul endroit.
+          </p>
+          <div class="about__values">
+            <div class="about__value">
+              <div class="about__value-icon">🎱</div>
+              <div>
+                <h4>Saisie rapide des tirages</h4>
+                <p>Renseignez un tirage complet (joueur, type, date, heure, 7 numéros) en moins de 30 secondes depuis le formulaire dédié.</p>
+              </div>
+            </div>
+            <div class="about__value">
+              <div class="about__value-icon">📊</div>
+              <div>
+                <h4>Historique toujours disponible</h4>
+                <p>Consultez, filtrez et recherchez dans l'ensemble de vos tirages passés, quel que soit le joueur ou la date.</p>
+              </div>
+            </div>
+            <div class="about__value">
+              <div class="about__value-icon">🔐</div>
+              <div>
+                <h4>Accès sécurisé</h4>
+                <p>L'espace de saisie est accessible via une interface de connexion. Vos données restent confidentielles et protégées.</p>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top: 28px;">
+            <a href="pages/connexion.html" class="btn btn-primary" id="btn-about-cta">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Commencer à enregistrer
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer" aria-label="Pied de page">
+    <div class="container">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__logo-text">Singué</div>
+          <p>La plateforme de référence pour consigner et suivre vos résultats de jeux de lotto. Simple, rapide, fiable.</p>
+        </div>
+        <div class="footer__col">
+          <h5>Navigation</h5>
+          <ul class="footer__links">
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#fonctionnement">Comment ça marche</a></li>
+            <li><a href="#fonctionnalites">Fonctionnalités</a></li>
+            <li><a href="#apropos">À propos</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h5>Registre</h5>
+          <ul class="footer__links">
+            <li><a href="pages/connexion.html">Se connecter</a></li>
+            <li><a href="pages/dashboard.html">Tableau de bord</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h5>Jeux suivis</h5>
+          <ul class="footer__links">
+            <li><a href="#fonctionnalites">SIMPLE</a></li>
+            <li><a href="#fonctionnalites">DOUBLE CHANCE</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">© 2026 Singué — Registre des résultats de Lotto.</p>
+        <div class="footer__bottom-links">
+          <a href="#accueil">Haut de page</a>
+          <a href="pages/connexion.html">Connexion</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Navbar scroll ── */
+    const toggle = document.getElementById('nav-toggle');
+    const menu   = document.getElementById('nav-menu');
+    const navbar = document.getElementById('navbar');
+
+    toggle.addEventListener('click', () => {
+      const open = menu.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+    });
+
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    /* ── Active nav link on scroll ── */
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.navbar__link');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 100) current = sec.id;
+      });
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href').replace('#','');
+        link.classList.toggle('active', href === current);
+      });
+    });
+
+    /* ── Animated counter ── */
+    function animateCount(el, target, duration = 1400) {
+      let start = 0;
+      const step = target / (duration / 16);
+      const timer = setInterval(() => {
+        start += step;
+        if (start >= target) { el.textContent = target; clearInterval(timer); return; }
+        el.textContent = Math.floor(start);
+      }, 16);
+    }
+
+    /* Trigger counter when strip enters viewport */
+    const cntEl = document.getElementById('cnt-tirages');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCount(cntEl, 248);
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    observer.observe(cntEl);
+  </script>
+</body>
+</html>

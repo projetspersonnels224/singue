@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tableau de bord Singué — Registre des données." />
+  <title>Tableau de bord — Singué</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/dashboard.css" />
+  <script src="../js/auth.js"></script>
+</head>
+<body class="page-dashboard">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar" aria-label="Navigation du tableau de bord">
+
+    <div class="sidebar__header">
+      <a href="../index.html" class="sidebar__logo" id="sidebar-logo" aria-label="Singué — Accueil">
+        <span class="sidebar__logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        <span class="sidebar__logo-text">Singué</span>
+      </a>
+    </div>
+
+    <nav class="sidebar__nav" aria-label="Menu principal">
+      <span class="sidebar__section">Principal</span>
+
+      <a href="dashboard.html" class="sidebar__link active" id="nav-dashboard" aria-current="page">
+        <span class="sidebar__link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+        </span>
+        Tableau de bord
+      </a>
+
+      <a href="#profil" class="sidebar__link" id="nav-profil">
+        <span class="sidebar__link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        Mon profil
+      </a>
+
+      <span class="sidebar__section">Gestion</span>
+
+      <a href="#" class="sidebar__link" id="nav-parametres">
+        <span class="sidebar__link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </span>
+        Paramètres
+      </a>
+
+      <a href="#" class="sidebar__link" id="nav-aide">
+        <span class="sidebar__link-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        Aide
+        <span class="sidebar__badge">3</span>
+      </a>
+    </nav>
+
+      <div class="sidebar__footer">
+      <div class="sidebar__user" id="sidebar-user">
+        <div class="sidebar__avatar" id="sidebar-avatar" aria-hidden="true">?</div>
+        <div>
+          <div class="sidebar__user-name" id="sidebar-user-name">—</div>
+          <div class="sidebar__user-email" id="sidebar-user-email">—</div>
+        </div>
+      </div>
+      <button type="button" class="sidebar__logout" id="btn-logout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="dash-main">
+
+    <header class="dash-topbar" aria-label="En-tête du tableau de bord">
+      <div class="dash-topbar__left">
+        <button class="sidebar-btn" id="sidebar-toggle" aria-label="Ouvrir le menu latéral" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="dash-topbar__title">
+          <h1>Tableau de bord</h1>
+          <p id="topbar-date">—</p>
+        </div>
+      </div>
+      <div class="dash-topbar__right">
+        <button class="topbar-btn" aria-label="Rechercher" title="Recherche">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="topbar-btn" aria-label="Notifications" title="Notifications" id="btn-notifications">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span class="notif-dot" aria-hidden="true"></span>
+        </button>
+        <div class="topbar-avatar" role="img" id="topbar-avatar" aria-label="Avatar utilisateur">?</div>
+      </div>
+    </header>
+
+    <main class="dash-content" aria-label="Contenu du tableau de bord">
+
+      <!-- ============ MAIN DATA TABLE ============ -->
+      <section class="data-section" aria-labelledby="data-table-title">
+        <div class="data-section__header">
+          <div class="data-section__title-group">
+            <h2 class="data-section__title" id="data-table-title">📋 Registre des données</h2>
+            <p class="data-section__sub">Consultez vos entrées — cliquez sur <strong>Ajouter</strong> pour enregistrer une nouvelle ligne</p>
+          </div>
+          <div class="data-section__actions">
+            <input type="text" id="table-search" class="table-search" placeholder="🔍 Rechercher..." aria-label="Rechercher dans le tableau" />
+            <button class="table-btn table-btn--primary" id="btn-add-row" title="Ajouter un enregistrement">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Ajouter
+            </button>
+          </div>
+        </div>
+
+        <div class="data-table-wrap">
+          <table class="data-table" id="main-data-table" aria-label="Tableau de données principal">
+            <thead>
+              <tr>
+                <th scope="col" class="col-num">#</th>
+                <th scope="col" class="col-nom">Nom</th>
+                <th scope="col" class="col-type">Type</th>
+                <th scope="col" class="col-date">Date</th>
+                <th scope="col" class="col-heure">Heure</th>
+                <th scope="col" class="col-n">N1</th>
+                <th scope="col" class="col-n">N2</th>
+                <th scope="col" class="col-n">N3</th>
+                <th scope="col" class="col-n">N4</th>
+                <th scope="col" class="col-n">N5</th>
+                <th scope="col" class="col-n">N6</th>
+                <th scope="col" class="col-n">N7</th>
+                <th scope="col" class="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="data-table-body">
+              <!-- Rempli dynamiquement -->
+            </tbody>
+          </table>
+          <div class="data-table__empty" id="data-table-empty" style="display:none;">
+            <span>📂</span>
+            <p>Aucune entrée pour le moment. Cliquez sur <strong>Ajouter</strong> pour commencer.</p>
+          </div>
+        </div>
+
+        <div class="data-table__footer" id="data-table-footer">
+          <span id="row-count">0 entrée(s)</span>
+          <span class="data-table__footer-hint">Faites défiler horizontalement si nécessaire →</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============ OVERLAY ============ -->
+  <div class="drawer-overlay" id="drawer-overlay" aria-hidden="true"></div>
+
+  <!-- ============ DRAWER FORMULAIRE ============ -->
+  <aside class="add-drawer" id="add-drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true">
+    <div class="add-drawer__header">
+      <div>
+        <h3 class="add-drawer__title" id="drawer-title">Nouvel enregistrement</h3>
+        <p class="add-drawer__sub" id="drawer-sub">Remplissez les champs puis validez</p>
+      </div>
+      <button class="add-drawer__close" id="btn-close-drawer" aria-label="Fermer le formulaire">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <form class="add-drawer__form" id="add-form" novalidate>
+
+      <!-- Nom -->
+      <div class="form-group">
+        <label class="form-label" for="f-nom">Nom <span class="form-required">*</span></label>
+        <select class="form-control" id="f-nom" name="nom" required>
+          <option value="" disabled selected>— Choisir un nom —</option>
+          <option>YIGUI</option>
+          <option>BOGNESSA</option>
+          <option>KHERY</option>
+          <option>MOUNANFANGNI</option>
+          <option>BANNAYA</option>
+          <option>SEWE</option>
+          <option>KHOUNAKELI</option>
+          <option>FERE</option>
+          <option>SABOUI</option>
+          <option>NAFOULI</option>
+        </select>
+      </div>
+
+      <!-- Type -->
+      <div class="form-group">
+        <label class="form-label" for="f-type">Type <span class="form-required">*</span></label>
+        <select class="form-control" id="f-type" name="type" required>
+          <option value="" disabled selected>— Choisir un type —</option>
+          <option>SIMPLE</option>
+          <option>DOUBLE CHANCE</option>
+        </select>
+      </div>
+
+      <!-- Date & Heure -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="f-date">Date <span class="form-required">*</span></label>
+          <input type="date" class="form-control" id="f-date" name="date" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-heure">Heure <span class="form-required">*</span></label>
+          <select class="form-control" id="f-heure" name="heure" required>
+            <option value="" disabled selected>— Heure —</option>
+            <option>08:00</option><option>09:00</option><option>10:00</option>
+            <option>10:30</option><option>11:00</option><option>12:00</option>
+            <option>13:00</option><option>14:00</option><option>15:00</option>
+            <option>15:30</option><option>16:00</option><option>17:00</option>
+            <option>18:00</option><option>19:00</option><option>20:00</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- N1 → N4 -->
+      <div class="form-row form-row--4">
+        <div class="form-group">
+          <label class="form-label" for="f-n1">N1</label>
+          <input type="number" class="form-control form-control--num" id="f-n1" name="n1" min="0" step="any" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-n2">N2</label>
+          <input type="number" class="form-control form-control--num" id="f-n2" name="n2" min="0" step="any" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-n3">N3</label>
+          <input type="number" class="form-control form-control--num" id="f-n3" name="n3" min="0" step="any" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-n4">N4</label>
+          <input type="number" class="form-control form-control--num" id="f-n4" name="n4" min="0" step="any" placeholder="0" />
+        </div>
+      </div>
+
+      <!-- N5 → N7 -->
+      <div class="form-row form-row--4">
+        <div class="form-group">
+          <label class="form-label" for="f-n5">N5</label>
+          <input type="number" class="form-control form-control--num" id="f-n5" name="n5" min="0" step="any" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-n6">N6</label>
+          <input type="number" class="form-control form-control--num" id="f-n6" name="n6" min="0" step="any" placeholder="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="f-n7">N7</label>
+          <input type="number" class="form-control form-control--num" id="f-n7" name="n7" min="0" step="any" placeholder="0" />
+        </div>
+      </div>
+
+      <div id="form-error" class="form-error" style="display:none;">
+        ⚠️ Veuillez remplir tous les champs obligatoires.
+      </div>
+
+      <div class="add-drawer__footer">
+        <button type="button" class="table-btn table-btn--ghost" id="btn-cancel-form">Annuler</button>
+        <button type="submit" class="table-btn table-btn--primary" id="btn-submit-form">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </aside>
+
+  <script>
+    /* ── Guard : rediriger si non connecté ── */
+    const SESSION = AUTH.requireAuth('../pages/connexion.html');
+    if (!SESSION) throw new Error('Accès non autorisé');
+
+    /* ── Afficher les informations de l'utilisateur ── */
+    document.getElementById('sidebar-avatar').textContent   = SESSION.avatar;
+    document.getElementById('sidebar-user-name').textContent = SESSION.name;
+    document.getElementById('sidebar-user-email').textContent = SESSION.email;
+    document.getElementById('topbar-avatar').textContent     = SESSION.avatar;
+    document.getElementById('topbar-avatar').setAttribute('aria-label', SESSION.name + ' — Avatar');
+
+    /* ── Déconnexion ── */
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      AUTH.logout('../pages/connexion.html');
+    });
+
+    /* ── Date dans la topbar ── */
+    const d = new Date();
+    document.getElementById('topbar-date').textContent = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+
+    /* ── Sidebar toggle ── */
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebar       = document.getElementById('sidebar');
+    sidebarToggle.addEventListener('click', () => {
+      const isOpen = sidebar.classList.toggle('open');
+      sidebarToggle.setAttribute('aria-expanded', isOpen);
+    });
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+        sidebar.classList.remove('open');
+        sidebarToggle.setAttribute('aria-expanded', false);
+      }
+    });
+
+    /* ── Options ── */
+    const NOM_OPTIONS   = ['YIGUI','BOGNESSA','KHERY','MOUNANFANGNI','BANNAYA','SEWE','KHOUNAKELI','FERE','SABOUI','NAFOULI'];
+    const TYPE_OPTIONS  = ['SIMPLE','DOUBLE CHANCE'];
+    const HEURE_OPTIONS = ['08:00','09:00','10:00','10:30','11:00','12:00','13:00','14:00','15:00','15:30','16:00','17:00','18:00','19:00','20:00'];
+
+    /* ── Persistance localStorage (simulation BDD) ── */
+    const STORAGE_KEY = 'singue_registre';
+
+    function getDB() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveDB(records) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+
+    /* ── Rendu du tableau (lecture seule) ── */
+    function formatDate(val) {
+      if (!val) return '—';
+      const [y, m, dd] = val.split('-');
+      return `${dd}/${m}/${y}`;
+    }
+    function typeBadge(type) {
+      const cls = type === 'SIMPLE' ? 'badge--simple' : 'badge--double';
+      return `<span class="type-badge ${cls}">${type}</span>`;
+    }
+    function renderTable() {
+      const records = getDB();
+      const tbody   = document.getElementById('data-table-body');
+      tbody.innerHTML = '';
+
+      const q = (document.getElementById('table-search').value || '').toLowerCase();
+
+      let visible = 0;
+      records.forEach((rec, idx) => {
+        const text = Object.values(rec).join(' ').toLowerCase();
+        if (q && !text.includes(q)) return;
+        visible++;
+        const tr = document.createElement('tr');
+        tr.dataset.idx = idx;
+        tr.style.animation = 'rowFadeIn .22s ease';
+        tr.innerHTML = `
+          <td class="td-num">${idx + 1}</td>
+          <td><span class="cell-nom">${rec.nom || '—'}</span></td>
+          <td>${typeBadge(rec.type || '')}</td>
+          <td>${formatDate(rec.date)}</td>
+          <td class="td-heure">${rec.heure || '—'}</td>
+          <td class="td-n">${rec.n1 ?? '0'}</td>
+          <td class="td-n">${rec.n2 ?? '0'}</td>
+          <td class="td-n">${rec.n3 ?? '0'}</td>
+          <td class="td-n">${rec.n4 ?? '0'}</td>
+          <td class="td-n">${rec.n5 ?? '0'}</td>
+          <td class="td-n">${rec.n6 ?? '0'}</td>
+          <td class="td-n">${rec.n7 ?? '0'}</td>
+          <td class="td-actions">
+            <button class="row-edit-btn" data-idx="${idx}" title="Modifier">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="row-delete-btn" data-idx="${idx}" title="Supprimer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M9 6V4h6v2"/></svg>
+            </button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('row-count').textContent = visible + ' entrée(s)';
+      document.getElementById('data-table-empty').style.display = visible === 0 ? 'flex' : 'none';
+
+      /* Boutons modifier */
+      tbody.querySelectorAll('.row-edit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i   = parseInt(btn.dataset.idx, 10);
+          const rec = getDB()[i];
+          openDrawer('edit', i, rec);
+        });
+      });
+
+      /* Boutons supprimer */
+      tbody.querySelectorAll('.row-delete-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = parseInt(btn.dataset.idx, 10);
+          if (!confirm('Supprimer cet enregistrement définitivement ?')) return;
+          const recs = getDB();
+          recs.splice(i, 1);
+          saveDB(recs);
+          renderTable();
+        });
+      });
+    }
+
+    /* ── Drawer (panneau formulaire) ── */
+    const drawer  = document.getElementById('add-drawer');
+    const overlay = document.getElementById('drawer-overlay');
+    let editIndex = -1;   // -1 = mode ajout, ≥0 = mode édition
+
+    function openDrawer(mode = 'add', idx = -1, rec = null) {
+      editIndex = idx;
+      const title = document.getElementById('drawer-title');
+      const sub   = document.getElementById('drawer-sub');
+      const btn   = document.getElementById('btn-submit-form');
+
+      if (mode === 'edit' && rec) {
+        title.textContent = 'Modifier l\'enregistrement';
+        sub.textContent   = 'Modifiez les champs puis validez';
+        btn.innerHTML     = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Mettre à jour`;
+        /* Pré-remplissage */
+        document.getElementById('f-nom').value   = rec.nom   || '';
+        document.getElementById('f-type').value  = rec.type  || '';
+        document.getElementById('f-date').value  = rec.date  || '';
+        document.getElementById('f-heure').value = rec.heure || '';
+        ['n1','n2','n3','n4','n5','n6','n7'].forEach(k => {
+          document.getElementById('f-' + k).value = rec[k] ?? '';
+        });
+      } else {
+        title.textContent = 'Nouvel enregistrement';
+        sub.textContent   = 'Remplissez les champs puis validez';
+        btn.innerHTML     = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Enregistrer`;
+        document.getElementById('add-form').reset();
+      }
+
+      document.getElementById('form-error').style.display = 'none';
+      drawer.classList.add('open');
+      overlay.classList.add('open');
+      drawer.setAttribute('aria-hidden', 'false');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('f-nom').focus();
+    }
+
+    function closeDrawer() {
+      drawer.classList.remove('open');
+      overlay.classList.remove('open');
+      drawer.setAttribute('aria-hidden', 'true');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      document.getElementById('add-form').reset();
+      document.getElementById('form-error').style.display = 'none';
+      editIndex = -1;
+    }
+
+    document.getElementById('btn-add-row').addEventListener('click', () => openDrawer('add'));
+    document.getElementById('btn-close-drawer').addEventListener('click', closeDrawer);
+    document.getElementById('btn-cancel-form').addEventListener('click', closeDrawer);
+    overlay.addEventListener('click', closeDrawer);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeDrawer();
+    });
+
+    /* ── Soumission du formulaire (ajout ou modification) ── */
+    document.getElementById('add-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const nom   = document.getElementById('f-nom').value;
+      const type  = document.getElementById('f-type').value;
+      const date  = document.getElementById('f-date').value;
+      const heure = document.getElementById('f-heure').value;
+
+      if (!nom || !type || !date || !heure) {
+        document.getElementById('form-error').style.display = 'flex';
+        return;
+      }
+      document.getElementById('form-error').style.display = 'none';
+
+      const record = {
+        nom,
+        type,
+        date,
+        heure,
+        n1: document.getElementById('f-n1').value || '0',
+        n2: document.getElementById('f-n2').value || '0',
+        n3: document.getElementById('f-n3').value || '0',
+        n4: document.getElementById('f-n4').value || '0',
+        n5: document.getElementById('f-n5').value || '0',
+        n6: document.getElementById('f-n6').value || '0',
+        n7: document.getElementById('f-n7').value || '0',
+      };
+
+      const recs = getDB();
+      let highlightSelector;
+
+      if (editIndex >= 0) {
+        /* Mode édition : mise à jour de l'enregistrement */
+        recs[editIndex] = record;
+        saveDB(recs);
+        closeDrawer();
+        renderTable();
+        highlightSelector = `#data-table-body tr[data-idx="${editIndex}"]`;
+      } else {
+        /* Mode ajout */
+        recs.push(record);
+        saveDB(recs);
+        closeDrawer();
+        renderTable();
+        highlightSelector = '#data-table-body tr:last-child';
+      }
+
+      /* Feedback visuel : flash de la ligne concernée */
+      const targetRow = document.querySelector(highlightSelector);
+      if (targetRow) {
+        targetRow.classList.add('row-highlight');
+        setTimeout(() => targetRow.classList.remove('row-highlight'), 1400);
+      }
+    });
+
+    /* ── Recherche ── */
+    document.getElementById('table-search').addEventListener('input', renderTable);
+
+    /* ── Init : charger les données de la BDD ── */
+    (function init() {
+      /* Si la BDD locale est vide, pré-charger les données d'exemple du schema SQL */
+      if (getDB().length === 0) {
+        const sample = [
+          { nom:'YIGUI',        type:'SIMPLE',        date:'2026-10-28', heure:'09:00', n1:12, n2:5,  n3:8,  n4:3,  n5:7, n6:2, n7:9 },
+          { nom:'BOGNESSA',     type:'DOUBLE CHANCE', date:'2026-10-27', heure:'10:00', n1:4,  n2:6,  n3:11, n4:2,  n5:9, n6:1, n7:5 },
+          { nom:'KHERY',        type:'SIMPLE',        date:'2026-10-26', heure:'14:00', n1:7,  n2:3,  n3:2,  n4:8,  n5:4, n6:6, n7:1 },
+          { nom:'MOUNANFANGNI', type:'DOUBLE CHANCE', date:'2026-10-25', heure:'11:00', n1:9,  n2:1,  n3:4,  n4:5,  n5:3, n6:8, n7:7 },
+          { nom:'BANNAYA',      type:'SIMPLE',        date:'2026-10-24', heure:'15:00', n1:2,  n2:8,  n3:6,  n4:4,  n5:5, n6:3, n7:10},
+          { nom:'SEWE',         type:'DOUBLE CHANCE', date:'2026-10-23', heure:'16:00', n1:6,  n2:4,  n3:3,  n4:7,  n5:1, n6:9, n7:2 },
+          { nom:'KHOUNAKELI',   type:'SIMPLE',        date:'2026-10-22', heure:'08:00', n1:3,  n2:7,  n3:9,  n4:1,  n5:6, n6:4, n7:8 },
+          { nom:'FERE',         type:'DOUBLE CHANCE', date:'2026-10-21', heure:'13:00', n1:8,  n2:2,  n3:5,  n4:9,  n5:2, n6:7, n7:3 },
+          { nom:'SABOUI',       type:'SIMPLE',        date:'2026-10-20', heure:'10:30', n1:5,  n2:9,  n3:1,  n4:6,  n5:4, n6:3, n7:7 },
+          { nom:'NAFOULI',      type:'DOUBLE CHANCE', date:'2026-10-19', heure:'15:30', n1:1,  n2:4,  n3:7,  n4:2,  n5:8, n6:5, n7:6 },
+        ];
+        saveDB(sample);
+      }
+      renderTable();
+    })();
+  </script>
+</body>
+</html>
